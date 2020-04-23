@@ -4,6 +4,7 @@
 
 bool Reader::OpenDevice(wstring volumeName)
 {
+	if (volumeHandle != INVALID_HANDLE_VALUE) return true;
 	bool returnValue = true;
 	int len = volumeName.length();
 	volumeName.at(len - 1) = 0;
@@ -13,15 +14,15 @@ bool Reader::OpenDevice(wstring volumeName)
 	return returnValue;
 }
 
-int Reader::ReadSector(int sector, int bytesToRead, UCHAR* buffer)
+int Reader::ReadSector(int sector, int sectorSize,int bytesToRead, UCHAR* buffer)
 {
 	if (volumeHandle == INVALID_HANDLE_VALUE) return 0;
 	int result = 0;
-	int remainBytes = bytesToRead % 512;
+	int remainBytes = bytesToRead % sectorSize;
 	int tempBytesToRead = bytesToRead - remainBytes;
 
 	LARGE_INTEGER shiftInSectors;
-	shiftInSectors.QuadPart = sector * 512;
+	shiftInSectors.QuadPart = sector * sectorSize;
 	SetFilePointerEx(volumeHandle, shiftInSectors, NULL, FILE_BEGIN);
 
 	DWORD alreadyReadBytes=0;
@@ -30,7 +31,7 @@ int Reader::ReadSector(int sector, int bytesToRead, UCHAR* buffer)
 
 	if (remainBytes!=0) {
 		UCHAR tempBuf[512] = {};
-		ReadFile(volumeHandle, tempBuf, 512, &alreadyReadBytes, NULL);
+		ReadFile(volumeHandle, tempBuf, sectorSize, &alreadyReadBytes, NULL);
 		memcpy(buffer + tempBytesToRead, tempBuf, remainBytes);
 		result += remainBytes;
 	}

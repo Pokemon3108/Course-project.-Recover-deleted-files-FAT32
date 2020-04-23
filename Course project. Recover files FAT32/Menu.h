@@ -8,7 +8,7 @@ public:
 	Menu() {};
 	~Menu() {};
 
-	int chooseVolume(ComputerInfo info);
-	void printVolumesInformation(ComputerInfo info);
+	int chooseVolume(ComputerInfo& info);
+	void printVolumesInformation(ComputerInfo& info) const;
 };
 

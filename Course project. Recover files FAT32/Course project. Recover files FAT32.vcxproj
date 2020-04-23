@@ -152,6 +152,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ComputerInfo.h" />
+    <ClInclude Include="Conversion.h" />
+    <ClInclude Include="FAT32FileSystem.h" />
+    <ClInclude Include="FAT32Structure.h" />
+    <ClInclude Include="File.h" />
     <ClInclude Include="InputCheck.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="pch.h" />
@@ -160,7 +164,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ComputerInfo.cpp" />
+    <ClCompile Include="Conversion.cpp" />
     <ClCompile Include="Course project. Recover files FAT32.cpp" />
+    <ClCompile Include="FAT32FileSystem.cpp" />
+    <ClCompile Include="File.cpp" />
     <ClCompile Include="InputCheck.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="pch.cpp">

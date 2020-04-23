@@ -33,6 +33,18 @@
     <ClInclude Include="Reader.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="FAT32Structure.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Conversion.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="File.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="FAT32FileSystem.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -54,6 +66,15 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="Reader.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Conversion.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="File.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="FAT32FileSystem.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>

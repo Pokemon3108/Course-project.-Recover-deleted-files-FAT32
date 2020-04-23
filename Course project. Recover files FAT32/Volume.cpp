@@ -47,7 +47,7 @@ wstring Volume::getFileSystemName()
 }
 
 
-LPCWSTR Volume::getGUIDPath()
+LPCWSTR Volume::getGUIDPath() const
 {
 	return GUIDPath;
 }
@@ -63,8 +63,6 @@ void Volume::setTotalCapacity()
 	if (!letter.length()) setLetter();
 	GetDiskFreeSpaceExW(letter.c_str(), NULL, &totalCapacity, NULL);
 }
-
-
 
 
 void Volume::setFileSystemName()

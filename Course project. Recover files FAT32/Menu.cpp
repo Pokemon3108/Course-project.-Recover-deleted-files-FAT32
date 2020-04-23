@@ -5,7 +5,7 @@
 #include <string>
 #include "InputCheck.h"
 
-int Menu::chooseVolume(ComputerInfo info)
+int Menu::chooseVolume(ComputerInfo& info)
 {
 	list<Volume> volumes = info.getVolumes();
 	int choice;
@@ -28,7 +28,7 @@ int Menu::chooseVolume(ComputerInfo info)
 	return choice;
 }
 
-void Menu::printVolumesInformation(ComputerInfo info)
+void Menu::printVolumesInformation(ComputerInfo& info) const
 {
 	list<Volume> volumes = info.getVolumes();
 	list<Volume>::iterator it = volumes.begin();

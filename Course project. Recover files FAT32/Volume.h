@@ -40,7 +40,7 @@ public:
 	wstring getFileSystemName();
 	void setFileSystemName();
 
-	LPCWSTR getGUIDPath();
+	LPCWSTR getGUIDPath() const;
 
 	ULARGE_INTEGER getTotalCapacity();
 	void setTotalCapacity();
