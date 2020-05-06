@@ -16,16 +16,33 @@ void FAT32FileSystem::parseBootSector(UCHAR * info)
 	bootSector.clusterOfRootDirectory = conversion.converseToType(info, 44, 47);
 }
 
+void FAT32FileSystem::parseFatTable(UCHAR * buffer, int size)
+{
+	for (int i = 0; i < size; ++i) {
+		UINT32 temp = 0;
+		for (int j = 3; j >= 0; --j) {
+			temp = temp << 8;
+			UCHAR c = buffer[i * 4 + j];
+			temp+=buffer[i * 4 + j];
+			
+		}
+		
+		fatTable[i] = temp;
+	}
+}
+
+
 int FAT32FileSystem::getStartSectorOfActiveFat()
 {
 	int numberOfActiveFat = bootSector.fatCopiesNumber, startSector= bootSector.reservedAreaSize;
-	if ((bootSector.numberOfUpdateFat & 64) == 0) {
+	if ((bootSector.numberOfUpdateFat & 128) == 0) {
 		numberOfActiveFat = bootSector.numberOfUpdateFat;
 		numberOfActiveFat &= 15;
 	}
-	if (numberOfActiveFat != bootSector.fatCopiesNumber) startSector *= numberOfActiveFat * bootSector.fatSize;
+	if (numberOfActiveFat != bootSector.fatCopiesNumber) startSector += numberOfActiveFat * bootSector.fatSize;
 	return startSector;
 }
+
 
 void FAT32FileSystem::createFatTable()
 {
@@ -47,13 +64,19 @@ void FAT32FileSystem::createFatTable()
 
 	} while (recordsAreEmpty && currentSector !=startFatSector);
 
-	numberOfFatRecords = (currentSector - startFatSector + 1)*bootSector.bytesInSector / 32;
-	fatTable = new UINT32[numberOfFatRecords];
-	reader->ReadSector(startFatSector, bootSector.bytesInSector, currentSector - startFatSector + 1,buffer);
-
 	delete[] buffer;
 
+	numberOfFatRecords = (currentSector - startFatSector + 1)*bootSector.bytesInSector / 4;
+	buffer = new UCHAR[numberOfFatRecords * 4];
+
+	fatTable = new UINT32[numberOfFatRecords*2];
+	reader->ReadSector(startFatSector, bootSector.bytesInSector, 
+		(currentSector - startFatSector + 1)*bootSector.bytesInSector,buffer);
+
+	parseFatTable(buffer, numberOfFatRecords);
+	delete[] buffer;
 }
+
 
 void FAT32FileSystem::createBootSector()
 {
@@ -61,4 +84,35 @@ void FAT32FileSystem::createBootSector()
 	reader->ReadSector(0, 512, 48, buffer);
 	parseBootSector(buffer);
 	delete[] buffer;
+}
+
+void FAT32FileSystem::createRootDirectory()
+{
+	UCHAR* buffer = new UCHAR[bootSector.bytesInSector];
+
+	bool recordIsEmpty = true;
+	int currentSector = bootSector.reservedAreaSize + bootSector.fatCopiesNumber*bootSector.fatSize;
+	currentSector += (bootSector.sectorsInCluster-1)*bootSector.bytesInSector;
+
+	int noZeroSectors = bootSector.sectorsInCluster;
+
+
+	while (noZeroSectors && recordIsEmpty) {
+		reader->ReadSector(currentSector, bootSector.bytesInSector, bootSector.bytesInSector, buffer);
+		for (int i = 0; i < bootSector.bytesInSector; ++i) {
+			if (buffer[i] != 0) {
+				recordIsEmpty = false;
+				break;
+			}
+		}
+		if (!recordIsEmpty) break;
+		currentSector -= bootSector.bytesInSector;
+		--noZeroSectors;
+	}
+
+	delete[] buffer;
+
+	int rootDirectorySize = (noZeroSectors)*bootSector.bytesInSector;
+	rootDirectory = new UCHAR[rootDirectorySize];
+
 }

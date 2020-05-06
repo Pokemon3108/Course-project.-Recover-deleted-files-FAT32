@@ -4,7 +4,7 @@
 
 bool Reader::OpenDevice(wstring volumeName)
 {
-	if (volumeHandle != INVALID_HANDLE_VALUE) return true;
+	if (volumeHandle != INVALID_HANDLE_VALUE) return false;
 	bool returnValue = true;
 	int len = volumeName.length();
 	volumeName.at(len - 1) = 0;
@@ -29,7 +29,7 @@ int Reader::ReadSector(int sector, int sectorSize,int bytesToRead, UCHAR* buffer
 	ReadFile(volumeHandle, buffer, tempBytesToRead, &alreadyReadBytes, NULL);
 	result = alreadyReadBytes;
 
-	if (remainBytes!=0) {
+	if (remainBytes != 0) {
 		UCHAR tempBuf[512] = {};
 		ReadFile(volumeHandle, tempBuf, sectorSize, &alreadyReadBytes, NULL);
 		memcpy(buffer + tempBytesToRead, tempBuf, remainBytes);

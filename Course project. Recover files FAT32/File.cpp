@@ -25,15 +25,20 @@ void File::setSize(UINT32 size) {
 	this->size = size;
 }
 
-FILE_TYPE File::getFileType() const {
+UCHAR File::getFileType() const {
 	return fileType;
 }
 
-void File::setFileType(FILE_TYPE fileType) {
+void File::setFileType(UCHAR fileType) {
 	this->fileType = fileType;
 }
 
-void File::setFileType(int fileType)
+UINT32 File::getrecordNumberInFat() const
 {
-	this->fileType = FILE_TYPE(fileType);
+	return recordNumberInFat;
+}
+
+void File::setrecordNumberInFat(UINT32 recordNumberInFat)
+{
+	this->recordNumberInFat = recordNumberInFat;
 }

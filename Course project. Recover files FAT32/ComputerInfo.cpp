@@ -24,8 +24,7 @@ void ComputerInfo::eraseNoNamedVolumes()
 {
 	Volume v;
 	list<Volume>::iterator it;
-	int i;
-	for (it = volumes.begin(), i = 0; it != volumes.end(); ) {
+	for (it = volumes.begin(); it != volumes.end(); ) {
 		if (it->getLetter()[0] == '*')
 			it = volumes.erase(it);
 		else ++it;

@@ -3,7 +3,7 @@
   <Class Name="ComputerInfo" Collapsed="true">
     <Position X="3.5" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAQABAAAAEAAAAAAAAIAAAAAAAAAAAAgAAAQAAAA=</HashCode>
+      <HashCode>AAAAARABAAAAEAAAAAAAAIAAAAAAAAAAAAgAAAQAAAA=</HashCode>
       <FileName>ComputerInfo.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -21,5 +21,54 @@
       <FileName>Volume.h</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="Conversion" Collapsed="true">
+    <Position X="8.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAgAAAAAAAAAAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>Conversion.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FAT32FileSystem" Collapsed="true">
+    <Position X="11.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABYAAAAAAAEIAAAAAAAAEAADAQAgAAAAJAAAAAAQAAA=</HashCode>
+      <FileName>FAT32FileSystem.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="File" Collapsed="true">
+    <Position X="11.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BgAQAAkAAIIAAAgAIIBAAAAAgAAECAAAAFAAAAAAIAA=</HashCode>
+      <FileName>File.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Reader" Collapsed="true">
+    <Position X="6.25" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAIAAAAAAgAAAAAAAAAAABAAEAAAAAA=</HashCode>
+      <FileName>Reader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="BootSector" Collapsed="true">
+    <Position X="7.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAMAAgAAAAAAAAAAAAAgAgAAAAAAABEIAIAAAA=</HashCode>
+      <FileName>FAT32Structure.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="DirectoryRecord" Collapsed="true">
+    <Position X="9.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAAAAAAAgAAAgAAAAAEAAAAEAAAAAAAAAA=</HashCode>
+      <FileName>FAT32Structure.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="DirectoryRecordLFN" Collapsed="true">
+    <Position X="7.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAQCAAAAAAAgAAQAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FAT32Structure.h</FileName>
+    </TypeIdentifier>
+  </Struct>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

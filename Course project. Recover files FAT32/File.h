@@ -9,7 +9,8 @@ private:
 	UINT32 startCluster;
 	wstring fileName;
 	UINT32 size;
-	FILE_TYPE fileType;
+	UCHAR fileType;
+	UINT32 recordNumberInFat;
 
 public:
 	File() {};
@@ -24,8 +25,11 @@ public:
 	UINT32 getSize() const;
 	void setSize(UINT32 size);
 
-	FILE_TYPE getFileType() const;
-	void setFileType(FILE_TYPE fileType);
-	void setFileType(int fileType);
+	UCHAR getFileType() const;
+	void setFileType(UCHAR fileType);
+	
+
+	UINT32 getrecordNumberInFat() const;
+	void setrecordNumberInFat(UINT32 recordNumberInFat);
 };
 

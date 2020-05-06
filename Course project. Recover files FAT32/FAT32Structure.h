@@ -3,9 +3,9 @@
 
 struct BootSector {
 	UINT16 bytesInSector;
-	BYTE sectorsInCluster;
+	UCHAR sectorsInCluster;
 	UINT16 reservedAreaSize;
-	BYTE fatCopiesNumber;
+	UCHAR fatCopiesNumber;
 	UINT16 sectorsInFS16;
 	UINT32 sectorsInFS32;
 	UINT32 fatSize;
@@ -14,31 +14,32 @@ struct BootSector {
 	
 };
 
+//enum FILE_TYPE {
+//	ONLY_FOR_READ = 0x01,
+//	HIDDEN_FILE = 0x02,
+//	SYSTEM_FILE = 0x04,
+//	VOLUME_LABEL = 0x08,
+//	LONG_FILE_NAME = 0x0f,
+//	DIRECTORY = 0x10,
+//	ARCHIVAL_FILE = 0x20
+//};
+
 
 struct DirectoryRecord {
-	BYTE name[11];
-	BYTE attribute;
+	UCHAR name[11];
+	UCHAR attribute;
 	UINT16 highBytesOfFirstCluster;
 	UINT16 lowBytesOfFirstCluster;
 	UINT32 fileSize;
 };
 
 
-enum FILE_TYPE {
-	ONLY_FOR_READ = 0x01,
-	HIDDEN_FILE=0x02,
-	SYSTEM_FILE=0x04,
-	VOLUME_LABEL=0x08,
-	LONG_FILE_NAME=0x0f,
-	DIRECTORY=0x10,
-	ARCHIVAL_FILE=0x20
-};
 
 struct DirectoryRecordLFN {
-	BYTE numberOfLFNRecord;
+	UCHAR numberOfLFNRecord;
 	WCHAR fileName1_5[5];
-	BYTE attribyte;
-	BYTE controlSum;
+	UCHAR attribyte;
+	UCHAR controlSum;
 	WCHAR fileName6_11[5];
 	WCHAR fileName12_13[2];
 };

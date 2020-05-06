@@ -4,6 +4,7 @@
 #include "Menu.h"
 #include "ComputerInfo.h"
 #include "Reader.h"
+#include "FAT32FileSystem.h"
 
 int main() {
 	const int bufferSize = 100;
@@ -34,7 +35,10 @@ int main() {
 
 	reader.OpenDevice(volume.getGUIDPath());
 
-	
+	FAT32FileSystem fat32 = FAT32FileSystem(&reader);
+	fat32.createBootSector();
+	fat32.createFatTable();
+	fat32.createRootDirectory();
 
 	return 0;
 }
