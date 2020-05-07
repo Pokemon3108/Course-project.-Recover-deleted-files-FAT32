@@ -31,6 +31,25 @@ void FAT32FileSystem::parseFatTable(UCHAR * buffer, int size)
 	}
 }
 
+File FAT32FileSystem::getFileInfo(UINT32 offset)
+{
+	Conversion conversion;
+	File fileRecord;
+
+	UINT16 highBytesOfFirstCluster = conversion.converseToType(rootDirectory + offset, 20, 21);
+	UINT16 lowBytesOfFirstCluster = conversion.converseToType(rootDirectory + offset, 26, 27);
+	UINT32 firstCluster;
+	firstCluster = highBytesOfFirstCluster << 16;
+	firstCluster += lowBytesOfFirstCluster;
+	fileRecord.setFirstCluster(firstCluster);
+
+	UINT32 fileSize = conversion.converseToType(rootDirectory + offset, 28, 31);
+	fileRecord.setSize(fileSize);
+
+	return fileRecord;
+}
+
+
 
 int FAT32FileSystem::getStartSectorOfActiveFat()
 {
@@ -112,7 +131,43 @@ void FAT32FileSystem::createRootDirectory()
 
 	delete[] buffer;
 
-	int rootDirectorySize = (noZeroSectors)*bootSector.bytesInSector;
+	rootDirectorySize = (noZeroSectors)*bootSector.bytesInSector;
 	rootDirectory = new UCHAR[rootDirectorySize];
+	
+
+	int rootDirectorySector = bootSector.reservedAreaSize + bootSector.fatCopiesNumber*bootSector.fatSize;
+	reader->ReadSector(rootDirectorySector, bootSector.bytesInSector, rootDirectorySize, rootDirectory);
+
+}
+
+void FAT32FileSystem::recoverDeletedFiles()
+{
+	UINT32 i = 0;
+	while (i < rootDirectorySize) {
+		if (rootDirectory[i] != 0xe5) {
+			i += 32;
+			continue;
+		}
+
+		else {
+			if (rootDirectory[i + 11] == 0x0f)  recoverLFNFile(i);
+				
+			if (rootDirectory[i + 11] == 0x20) {
+				recoverFile(i);
+				i += 32;
+			}
+		}
+	}
+}
+
+void FAT32FileSystem::recoverLFNFile(UINT32 & offset)
+{
+
+}
+
+void FAT32FileSystem::recoverFile(UINT32 offset)
+{
+	File fileRecord = getFileInfo(offset);
+	int clusterNumber = fileRecord.getSize() / (bootSector.sectorsInCluster*bootSector.bytesInSector) + 1;
 
 }

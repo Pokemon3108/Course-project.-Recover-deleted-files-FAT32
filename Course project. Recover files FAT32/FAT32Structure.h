@@ -26,10 +26,7 @@ struct BootSector {
 
 
 struct DirectoryRecord {
-	UCHAR name[11];
-	UCHAR attribute;
-	UINT16 highBytesOfFirstCluster;
-	UINT16 lowBytesOfFirstCluster;
+	UINT32 firstCluster;
 	UINT32 fileSize;
 };
 

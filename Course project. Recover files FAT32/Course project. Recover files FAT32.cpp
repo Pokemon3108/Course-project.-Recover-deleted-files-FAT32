@@ -39,6 +39,7 @@ int main() {
 	fat32.createBootSector();
 	fat32.createFatTable();
 	fat32.createRootDirectory();
+	fat32.recoverDeletedFiles();
 
 	return 0;
 }
