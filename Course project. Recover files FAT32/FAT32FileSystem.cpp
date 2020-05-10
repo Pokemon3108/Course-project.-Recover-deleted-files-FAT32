@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "FAT32FileSystem.h"
 #include "Conversion.h"
+#include <iostream>
 
 void FAT32FileSystem::parseBootSector(UCHAR * info)
 {
@@ -143,6 +144,7 @@ void FAT32FileSystem::createRootDirectory()
 void FAT32FileSystem::recoverDeletedFiles()
 {
 	UINT32 i = 0;
+
 	while (i < rootDirectorySize) {
 		if (rootDirectory[i] != 0xe5) {
 			i += 32;
@@ -170,4 +172,29 @@ void FAT32FileSystem::recoverFile(UINT32 offset)
 	File fileRecord = getFileInfo(offset);
 	int clusterNumber = fileRecord.getSize() / (bootSector.sectorsInCluster*bootSector.bytesInSector) + 1;
 
+}
+
+void FAT32FileSystem::write()
+{
+	DWORD d;
+	STORAGE_PROPERTY_QUERY query = { StorageAccessAlignmentProperty,PropertyStandardQuery };
+	STORAGE_ACCESS_ALIGNMENT_DESCRIPTOR al = {};
+	DeviceIoControl(reader->getHandle(), IOCTL_STORAGE_QUERY_PROPERTY, &query, sizeof query, &al, sizeof al, &d, NULL);
+
+	DWORD f;
+	rootDirectory[225] = 'a';
+	LONG shift= (bootSector.reservedAreaSize + bootSector.fatCopiesNumber*bootSector.fatSize)*bootSector.bytesInSector;
+	 
+	DWORD b=SetFilePointer(reader->getHandle(), shift, NULL, FILE_BEGIN);
+
+	//UCHAR* buffer = new UCHAR[512];
+	
+	//reader->ReadSector(0, 512, 512, buffer);
+	UCHAR buf[65536] = {};
+	bool flag=WriteFile(reader->getHandle(), buf, 65536, &f, NULL);
+	if (flag == 0) std::cout << "Error" << std::endl;
+	std::cout << GetLastError();
+
+
+	
 }

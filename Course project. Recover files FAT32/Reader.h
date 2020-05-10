@@ -18,6 +18,7 @@ public:
 			CloseHandle(volumeHandle);
 	}
 
+	HANDLE getHandle();
 	bool OpenDevice(wstring volumeName);
 	int ReadSector(int sector, int sectorSize,int bytesToRead, UCHAR* buffer);
 };

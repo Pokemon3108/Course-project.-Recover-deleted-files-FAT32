@@ -20,12 +20,13 @@ int main() {
 	menu.printVolumesInformation(info);
 	if (!info.fileSystemisInComputer(fat)) {
 		cout << "There is no FAT32 in computer" << endl;
+		getchar();
 		return 0;
 	}
-	//int numberOfVolume=menu.chooseVolume(info);
+	int numberOfVolume=menu.chooseVolume(info);
 
 	//if (numberOfVolume == -1) return 0;
-	int numberOfVolume = 2;
+	//int numberOfVolume = 2;
 	Volume volume = info.getVolume(numberOfVolume);
 
 	//wstring path = volume.getGUIDPath();
@@ -35,11 +36,27 @@ int main() {
 
 	reader.OpenDevice(volume.getGUIDPath());
 
+
 	FAT32FileSystem fat32 = FAT32FileSystem(&reader);
 	fat32.createBootSector();
 	fat32.createFatTable();
 	fat32.createRootDirectory();
-	fat32.recoverDeletedFiles();
+	fat32.write();
+	//fat32.recoverDeletedFiles();
+
+/*
+	const char* path = "G:/";
+	DWORD d;
+	STORAGE_PROPERTY_QUERY query = { StorageAccessAlignmentProperty,PropertyStandardQuery };
+	STORAGE_ACCESS_ALIGNMENT_DESCRIPTOR al = {};
+	DeviceIoControl(reader.getHandle(), IOCTL_DISK_IS_WRITABLE,NULL, 0, NULL, 0, &d, NULL);*/
+
+	//
+	// 
+	////UCHAR buf[2] = {'2', '3'};
+	//DWORD w;
+	//SetFilePointer(reader.getHandle(), 0 , NULL, FILE_BEGIN);
+	//WriteFile(reader.getHandle(), buf, 2, &w, NULL);
 
 	return 0;
 }

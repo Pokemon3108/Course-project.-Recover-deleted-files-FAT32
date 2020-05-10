@@ -35,5 +35,7 @@ public:
 	void recoverLFNFile(UINT32& offset);
 	void recoverFile(UINT32 offset);
 
+	void write();
+
 };
 
