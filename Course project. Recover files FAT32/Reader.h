@@ -20,6 +20,6 @@ public:
 
 	HANDLE getHandle();
 	bool OpenDevice(wstring volumeName);
-	int ReadSector(int sector, int sectorSize,int bytesToRead, UCHAR* buffer);
+	int ReadSector(UINT64 sector, int sectorSize,int bytesToRead, UCHAR* buffer);
 };
 

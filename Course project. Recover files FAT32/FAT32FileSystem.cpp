@@ -2,6 +2,8 @@
 #include "FAT32FileSystem.h"
 #include "Conversion.h"
 #include <iostream>
+#include <algorithm>
+#include <vector>
 
 void FAT32FileSystem::parseBootSector(UCHAR * info)
 {
@@ -37,19 +39,30 @@ File FAT32FileSystem::getFileInfo(UINT32 offset)
 	Conversion conversion;
 	File fileRecord;
 
-	UINT16 highBytesOfFirstCluster = conversion.converseToType(rootDirectory + offset, 20, 21);
-	UINT16 lowBytesOfFirstCluster = conversion.converseToType(rootDirectory + offset, 26, 27);
-	UINT32 firstCluster;
-	firstCluster = highBytesOfFirstCluster << 16;
-	firstCluster += lowBytesOfFirstCluster;
+	UINT32 firstCluster = getFirstCluster(offset);
 	fileRecord.setFirstCluster(firstCluster);
 
 	UINT32 fileSize = conversion.converseToType(rootDirectory + offset, 28, 31);
 	fileRecord.setSize(fileSize);
 
+	wstring fileName;
+	copy(rootDirectory + offset, rootDirectory + offset + 8, fileName);
+	fileRecord.setFileName(fileName);
+	fileRecord.deleteSpacesInName();
+		
 	return fileRecord;
 }
 
+UINT32 FAT32FileSystem::getFirstCluster(UINT32 offset)
+{
+	Conversion conversion;
+	UINT16 highBytesOfFirstCluster = conversion.converseToType(rootDirectory + offset, 20, 21);
+	UINT16 lowBytesOfFirstCluster = conversion.converseToType(rootDirectory + offset, 26, 27);
+	UINT32 firstCluster;
+	firstCluster = highBytesOfFirstCluster << 16;
+	firstCluster += lowBytesOfFirstCluster;
+	return firstCluster;
+}
 
 
 int FAT32FileSystem::getStartSectorOfActiveFat()
@@ -143,20 +156,22 @@ void FAT32FileSystem::createRootDirectory()
 
 void FAT32FileSystem::recoverDeletedFiles()
 {
-	UINT32 i = 0;
+	UINT32 offset = 0;
 
-	while (i < rootDirectorySize) {
-		if (rootDirectory[i] != 0xe5) {
-			i += 32;
+	while (offset < rootDirectorySize) {
+		if (rootDirectory[offset] != 0xe5) {
+			offset += 32;
 			continue;
 		}
 
 		else {
-			if (rootDirectory[i + 11] == 0x0f)  recoverLFNFile(i);
+			if (rootDirectory[offset + 11] == 0x0f && isCorrectLFN(offset)) {
+				recoverLFNFile(offset);
+			}
 				
-			if (rootDirectory[i + 11] == 0x20) {
-				recoverFile(i);
-				i += 32;
+			if (rootDirectory[offset + 11] == 0x20) {
+				recoverFile(offset);
+				offset += 32;
 			}
 		}
 	}
@@ -170,31 +185,56 @@ void FAT32FileSystem::recoverLFNFile(UINT32 & offset)
 void FAT32FileSystem::recoverFile(UINT32 offset)
 {
 	File fileRecord = getFileInfo(offset);
-	int clusterNumber = fileRecord.getSize() / (bootSector.sectorsInCluster*bootSector.bytesInSector) + 1;
+	
+	if (!isFreeCluster(offset, fileRecord.getFirstCluster())) return;
 
+	vector<UINT32> clusters=getFileClusters(fileRecord);
+	UCHAR* fileContent = new UCHAR[fileRecord.getSize()];
+
+	UINT64 startSector = bootSector.reservedAreaSize + bootSector.fatCopiesNumber*bootSector.fatSize +
+		(fileRecord.getFirstCluster() - 2)*bootSector.sectorsInCluster;
+	reader->ReadSector(startSector, bootSector.bytesInSector, fileRecord.getSize(), fileContent);
+
+	wstring filePath = L"..\\RecoveredFiles\\" + fileRecord.getFileName();
+	HANDLE hFile = CreateFileW(filePath.c_str, GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	DWORD written;
+	WriteFile(hFile, fileContent, fileRecord.getSize(), &written, NULL);
+
+	delete[] fileContent;
 }
 
-void FAT32FileSystem::write()
+vector<UINT32> FAT32FileSystem::getFileClusters(const File & file)
 {
-	DWORD d;
-	STORAGE_PROPERTY_QUERY query = { StorageAccessAlignmentProperty,PropertyStandardQuery };
-	STORAGE_ACCESS_ALIGNMENT_DESCRIPTOR al = {};
-	DeviceIoControl(reader->getHandle(), IOCTL_STORAGE_QUERY_PROPERTY, &query, sizeof query, &al, sizeof al, &d, NULL);
-
-	DWORD f;
-	rootDirectory[225] = 'a';
-	LONG shift= (bootSector.reservedAreaSize + bootSector.fatCopiesNumber*bootSector.fatSize)*bootSector.bytesInSector;
-	 
-	DWORD b=SetFilePointer(reader->getHandle(), shift, NULL, FILE_BEGIN);
-
-	//UCHAR* buffer = new UCHAR[512];
-	
-	//reader->ReadSector(0, 512, 512, buffer);
-	UCHAR buf[65536] = {};
-	bool flag=WriteFile(reader->getHandle(), buf, 65536, &f, NULL);
-	if (flag == 0) std::cout << "Error" << std::endl;
-	std::cout << GetLastError();
-
-
-	
+	vector<UINT32> clusters;
+	int clusterNumber = file.getSize() / (bootSector.sectorsInCluster*bootSector.bytesInSector) + 1;
+	UINT64 startCluster = file.getFirstCluster();
+	for (int i = 0; i < clusterNumber; ++i) {
+		UINT64 cluster = startCluster;
+		clusters.push_back(cluster);
+		startCluster = fatTable[startCluster];
+	}
 }
+
+bool FAT32FileSystem::isCorrectLFN(UINT32 offset)
+{
+	bool isCorrect = true;
+	while (rootDirectory[offset + 11] == 0x0f) offset += 32;
+	File fileLfn = getFileInfo(offset);
+	if (fileLfn.getFirstCluster() == 0) isCorrect = false;
+	return isCorrect;
+}
+
+bool FAT32FileSystem::isFreeCluster(UINT32 offset, int clusterNumber)
+{
+	bool isFree = true;
+	offset += 32;
+	while (offset < rootDirectorySize) {
+		if (clusterNumber == getFirstCluster(offset)) {
+			isFree = false;
+			break;
+		}
+	}
+	return isFree;
+}
+
+

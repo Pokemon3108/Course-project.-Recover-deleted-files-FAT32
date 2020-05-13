@@ -41,22 +41,8 @@ int main() {
 	fat32.createBootSector();
 	fat32.createFatTable();
 	fat32.createRootDirectory();
-	fat32.write();
-	//fat32.recoverDeletedFiles();
-
-/*
-	const char* path = "G:/";
-	DWORD d;
-	STORAGE_PROPERTY_QUERY query = { StorageAccessAlignmentProperty,PropertyStandardQuery };
-	STORAGE_ACCESS_ALIGNMENT_DESCRIPTOR al = {};
-	DeviceIoControl(reader.getHandle(), IOCTL_DISK_IS_WRITABLE,NULL, 0, NULL, 0, &d, NULL);*/
-
-	//
-	// 
-	////UCHAR buf[2] = {'2', '3'};
-	//DWORD w;
-	//SetFilePointer(reader.getHandle(), 0 , NULL, FILE_BEGIN);
-	//WriteFile(reader.getHandle(), buf, 2, &w, NULL);
+	
+	
 
 	return 0;
 }

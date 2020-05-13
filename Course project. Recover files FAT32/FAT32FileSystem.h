@@ -15,6 +15,7 @@ class FAT32FileSystem
 	void parseBootSector(UCHAR* info);
 	void parseFatTable(UCHAR* buffer, int size);
 	File getFileInfo(UINT32 offset);
+	UINT32 getFirstCluster(UINT32 offset);
 
 public:
 	FAT32FileSystem(Reader* reader) {
@@ -35,7 +36,9 @@ public:
 	void recoverLFNFile(UINT32& offset);
 	void recoverFile(UINT32 offset);
 
-	void write();
+	vector<UINT32> getFileClusters(const File& file);
+	bool isCorrectLFN(UINT32 offset);
+	bool isFreeCluster(UINT32 offset, int clusterNumber);
 
 };
 

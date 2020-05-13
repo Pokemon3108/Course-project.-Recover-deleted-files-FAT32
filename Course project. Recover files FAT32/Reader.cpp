@@ -19,7 +19,7 @@ bool Reader::OpenDevice(wstring volumeName)
 	return returnValue;
 }
 
-int Reader::ReadSector(int sector, int sectorSize,int bytesToRead, UCHAR* buffer)
+int Reader::ReadSector(UINT64 sector, int sectorSize,int bytesToRead, UCHAR* buffer)
 {
 	if (volumeHandle == INVALID_HANDLE_VALUE) return 0;
 	int result = 0;
