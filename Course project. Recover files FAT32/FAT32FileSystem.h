@@ -12,11 +12,7 @@ class FAT32FileSystem
 	UCHAR* rootDirectory;
 	UINT32 rootDirectorySize;
 
-	void parseBootSector(UCHAR* info);
-	void parseFatTable(UCHAR* buffer, int size);
-	File getFileInfo(UINT32 offset);
-	UINT32 getFirstCluster(UINT32 offset);
-
+	
 public:
 	FAT32FileSystem(Reader* reader) {
 		this->reader = reader;
@@ -26,6 +22,9 @@ public:
 		delete[] rootDirectory;
 	};
 
+	void parseBootSector(UCHAR* info);
+	void parseFatTable(UCHAR* buffer, int size);
+
 	void createFatTable();
 	void createBootSector();
 	void createRootDirectory();
@@ -33,12 +32,13 @@ public:
 	int getStartSectorOfActiveFat();
 
 	void recoverDeletedFiles();
-	void recoverLFNFile(UINT32& offset);
-	void recoverFile(UINT32 offset);
+	void recoverFile(UINT32 offset, File& fileRecord);
 
 	vector<UINT32> getFileClusters(const File& file);
 	bool isCorrectLFN(UINT32 offset);
 	bool isFreeCluster(UINT32 offset, int clusterNumber);
+
+	void getFileInfo(UINT32 offset, File& file);
 
 };
 

@@ -25,6 +25,9 @@ public:
 	void setFileName(wstring& fileName);
 
 	void deleteSpacesInName();
-
+	
+	void createFileName(UCHAR* record);
+	void createSize(UCHAR* record);
+	UINT32 createFirstCluster(UCHAR* record);
 };
 

@@ -68,7 +68,7 @@ void Volume::setTotalCapacity()
 void Volume::setFileSystemName()
 {
 	LPWSTR fsName=new WCHAR[bufferSize];
-	GetVolumeInformation(GUIDPath, NULL, NULL, NULL, NULL, NULL, fsName, bufferSize);
+	GetVolumeInformationW(GUIDPath, NULL, NULL, NULL, NULL, NULL, fsName, bufferSize);
 	fileSystemName = fsName;
 	delete[] fsName;
 }

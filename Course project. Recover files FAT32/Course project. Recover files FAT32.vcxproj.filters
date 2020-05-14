@@ -45,6 +45,9 @@
     <ClInclude Include="FAT32FileSystem.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="FileLfn.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -75,6 +78,9 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="FAT32FileSystem.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="FileLfn.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
