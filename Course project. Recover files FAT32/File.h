@@ -5,7 +5,7 @@
 using namespace std;
 class File
 {
-private:
+protected:
 	UINT32 firstCluster;
 	UINT32 size;
 	wstring fileName;

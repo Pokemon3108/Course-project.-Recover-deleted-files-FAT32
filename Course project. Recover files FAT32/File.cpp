@@ -3,10 +3,11 @@
 #include <algorithm>
 #include "Conversion.h"
 
+
 void File::deleteSpacesInName()
 {
 	wstring::iterator it = fileName.begin();
-	std::advance(it, 8);
+	advance(it, 8);
 	fileName.insert(it, '.');
 	fileName.erase(std::remove(fileName.begin(), fileName.end(), ' '), fileName.end());
 }
@@ -14,10 +15,16 @@ void File::deleteSpacesInName()
 
 void File::createFileName(UCHAR * record)
 {
-	wstring fileName;
-	std::copy(record, record + 8, fileName);
-	this->fileName = fileName;
+	char* nameBuffer = (char*)calloc(13, sizeof(char));
+	copy(record, record + 11, nameBuffer);
+	nameBuffer[0] = '$';
+	string fileName(nameBuffer);
+
+	wstring wName(fileName.begin(), fileName.end());
+	this->fileName = wName;
 	deleteSpacesInName();
+	free(nameBuffer);
+	
 }
 
 void File::createSize(UCHAR * record)

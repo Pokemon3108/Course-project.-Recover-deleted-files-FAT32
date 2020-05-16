@@ -27,7 +27,7 @@ void ComputerInfo::eraseNoNamedVolumes()
 	for (it = volumes.begin(); it != volumes.end(); ) {
 		if (it->getLetter()[0] == '*')
 			it = volumes.erase(it);
-		else ++it;
+		else it++;
 	}
 }
 
@@ -35,7 +35,7 @@ bool ComputerInfo::fileSystemisInComputer(wstring fsName)
 {
 	list<Volume>::iterator it;
 	bool flag=false;
-	for (it = volumes.begin(); it != volumes.end(); ++it) {
+	for (it = volumes.begin(); it != volumes.end(); it++) {
 		if (it->getFileSystemName() == fsName) {
 			flag = true;
 			break;

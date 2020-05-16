@@ -2,6 +2,8 @@
 #include "Reader.h"
 #include "FAT32Structure.h"
 #include "File.h"
+#include <list>
+
 
 class FAT32FileSystem
 {
@@ -30,11 +32,12 @@ public:
 	void createRootDirectory();
 
 	int getStartSectorOfActiveFat();
+	list<int> getFileClusters(const File& file);
 
 	void recoverDeletedFiles();
 	void recoverFile(UINT32 offset, File& fileRecord);
 
-	vector<UINT32> getFileClusters(const File& file);
+	
 	bool isCorrectLFN(UINT32 offset);
 	bool isFreeCluster(UINT32 offset, int clusterNumber);
 

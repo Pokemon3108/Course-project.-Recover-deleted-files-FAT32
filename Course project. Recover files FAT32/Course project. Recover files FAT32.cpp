@@ -36,12 +36,13 @@ int main() {
 
 	reader.OpenDevice(volume.getGUIDPath());
 
-
+	cout << "Parse file system..." << endl;
 	FAT32FileSystem fat32 = FAT32FileSystem(&reader);
 	fat32.createBootSector();
 	fat32.createFatTable();
 	fat32.createRootDirectory();
-	
+	cout << "Recover files..." << endl;
+	fat32.recoverDeletedFiles();
 	
 
 	return 0;

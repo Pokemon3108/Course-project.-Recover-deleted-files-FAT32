@@ -37,6 +37,7 @@ int Reader::ReadSector(UINT64 sector, int sectorSize,int bytesToRead, UCHAR* buf
 	if (remainBytes != 0) {
 		UCHAR tempBuf[1024] = {};
 		ReadFile(volumeHandle, tempBuf, sectorSize, &alreadyReadBytes, NULL);
+		// strcpy(buffer + tempBytesToRead, tempBuf);
 		memcpy(buffer + tempBytesToRead, tempBuf, remainBytes);
 		result += remainBytes;
 	}

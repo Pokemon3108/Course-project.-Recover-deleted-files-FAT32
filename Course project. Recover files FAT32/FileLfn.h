@@ -3,6 +3,7 @@
 
 class FileLfn : public File
 {
+
 public:
 	FileLfn() {};
 	~FileLfn() {};

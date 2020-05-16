@@ -4,7 +4,7 @@
 
 std::wstring FileLfn::createFileName(UCHAR * record)
 {
-	int offset;
+	int offset=0;
 	wstring name;
 	
 	while (record[offset + 11] == 0x0f) {
@@ -32,6 +32,7 @@ std::wstring FileLfn::getPartName(UCHAR * record, int offsetStart, int offsetEnd
 
 	delete[] buffer;
 	delete[] namePart;
+	return part;
 }
 
 void FileLfn::createSize(UCHAR * record)
@@ -46,4 +47,5 @@ UINT32 FileLfn::createFirstCluster(UCHAR * record)
 	int offset = 0;
 	while (record[offset + 11] == 0x0f) offset += 32;
 	File::createFirstCluster(record + offset);
+	return this->getFirstCluster();
 }
