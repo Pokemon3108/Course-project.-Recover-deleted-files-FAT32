@@ -13,7 +13,7 @@ void File::deleteSpacesInName()
 }
 
 
-void File::createFileName(UCHAR * record)
+void File::createFileName(const UCHAR * record)
 {
 	char* nameBuffer = (char*)calloc(13, sizeof(char));
 	copy(record, record + 11, nameBuffer);
@@ -24,17 +24,17 @@ void File::createFileName(UCHAR * record)
 	this->fileName = wName;
 	deleteSpacesInName();
 	free(nameBuffer);
-	
+	//return wName;
 }
 
-void File::createSize(UCHAR * record)
+void File::createSize(const UCHAR * record)
 {
 	Conversion conversion;
 	UINT32 fileSize = conversion.converseToType(record, 28, 31);
 	this->size = fileSize;
 }
 
-UINT32 File::createFirstCluster(UCHAR * record)
+UINT32 File::createFirstCluster(const UCHAR * record)
 {
 	Conversion conversion;
 	UINT16 highBytesOfFirstCluster = conversion.converseToType(record, 20, 21);

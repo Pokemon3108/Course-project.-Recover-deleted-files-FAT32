@@ -6,6 +6,6 @@ public:
 	Conversion() {};
 	~Conversion() {};
 
-	UINT32 converseToType(UCHAR* bytes, int startBorder, int endBorder);
+	UINT32 converseToType(const UCHAR* bytes, int startBorder, int endBorder);
 };
 

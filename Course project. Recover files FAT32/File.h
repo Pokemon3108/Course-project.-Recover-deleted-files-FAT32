@@ -26,8 +26,8 @@ public:
 
 	void deleteSpacesInName();
 	
-	void createFileName(UCHAR* record);
-	void createSize(UCHAR* record);
-	UINT32 createFirstCluster(UCHAR* record);
+	virtual void createFileName(const UCHAR* record);
+	virtual void createSize(const UCHAR* record);
+	virtual UINT32 createFirstCluster(const UCHAR* record);
 };
 

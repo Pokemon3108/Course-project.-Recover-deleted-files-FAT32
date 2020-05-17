@@ -2,7 +2,7 @@
 #include "Conversion.h"
 
 
-UINT32 Conversion::converseToType(UCHAR* bytes, int startBorder, int endBorder)
+UINT32 Conversion::converseToType(const UCHAR* bytes, int startBorder, int endBorder)
 {
 	UINT32 number=0;
 	for (int i = endBorder; i >= startBorder; --i) {

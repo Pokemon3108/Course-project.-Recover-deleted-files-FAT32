@@ -62,7 +62,7 @@ list<int> FAT32FileSystem::getFileClusters(const File & file)
 	for (int i = 0; i < clusterNumber; i++) {
 		int cluster = startCluster;
 		clusters.push_back(cluster);
-		startCluster = fatTable[startCluster];
+		while (fatTable[startCluster++]);
 	}
 	return clusters;
 }
@@ -157,10 +157,15 @@ void FAT32FileSystem::recoverDeletedFiles()
 
 		else {
 			if (rootDirectory[offset + 11] == 0x0f) {
-				if (!isCorrectLFN(offset))
-					while (rootDirectory[offset + 11] == 0x0f) offset += 32;
+				if (!isCorrectLFN(offset)) {
+					while (rootDirectory[offset + 11] == 0x0f)  offset += 32;
+					offset += 32;
+					continue;
+				}
+							
 				FileLfn fileLfn;
 				recoverFile(offset, fileLfn);
+				while (rootDirectory[offset + 11] == 0x0f) offset += 32;
 			}
 				
 
@@ -179,13 +184,15 @@ void FAT32FileSystem::recoverDeletedFiles()
 void FAT32FileSystem::recoverFile(UINT32 offset, File& fileRecord)
 {
 	getFileInfo(offset, fileRecord);
-	
+
+	while (rootDirectory[offset + 11] == 0x0f) offset += 32;
+	offset += 32;
 	if (!isFreeCluster(offset, fileRecord.getFirstCluster())) return;
 
 	list<int> clusters=getFileClusters(fileRecord);
-	UCHAR* fileContent = (UCHAR*)calloc(sizeof(UCHAR), fileRecord.getSize());
+	UCHAR* fileContent = new UCHAR[fileRecord.getSize()];
 
-	//проверить чтение 
+	
 	UINT64 startSector = bootSector.reservedAreaSize + bootSector.fatCopiesNumber*bootSector.fatSize +
 		(fileRecord.getFirstCluster() - 2)*bootSector.sectorsInCluster;
 	reader->ReadSector(startSector, bootSector.bytesInSector, fileRecord.getSize(), fileContent);
@@ -195,7 +202,7 @@ void FAT32FileSystem::recoverFile(UINT32 offset, File& fileRecord)
 	DWORD written;
 	WriteFile(hFile, fileContent, fileRecord.getSize(), &written, NULL);
 
-	free(fileContent);
+	delete [] fileContent;
 }
 
 
@@ -217,7 +224,7 @@ bool FAT32FileSystem::isFreeCluster(UINT32 offset, int clusterNumber)
 	offset += 32;
 	while (offset < rootDirectorySize) {
 		while (rootDirectory[offset + 11] == 0x0f) offset += 32;
-
+		
 		if (clusterNumber == file.createFirstCluster(rootDirectory+offset)) {
 			isFree = false;
 			break;
