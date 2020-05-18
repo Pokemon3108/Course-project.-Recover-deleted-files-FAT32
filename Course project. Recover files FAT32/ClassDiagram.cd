@@ -31,42 +31,35 @@
   <Class Name="FAT32FileSystem" Collapsed="true">
     <Position X="11.25" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>ABYAAAAAAAEIAAAAAAAAEAADAQAgAAAAJAAAAAAQAAA=</HashCode>
+      <HashCode>AJYQAAEAAAEIAAAAAAAAEAADAwAgAAAAJAEIAAAQBAA=</HashCode>
       <FileName>FAT32FileSystem.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="File" Collapsed="true">
     <Position X="11.75" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>BgAQAAkAAIIAAAgAIIBAAAAAgAAECAAAAFAAAAAAIAA=</HashCode>
+      <HashCode>BAAAAABAAIAAAAggAIBABAAAARAECAAAAEAAAAAAAQA=</HashCode>
       <FileName>File.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Reader" Collapsed="true">
     <Position X="6.25" Y="1" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAgAAIAAAAAAgAAAAAAAAAAABAAEAAAAAA=</HashCode>
+      <HashCode>AAAAAACAAAAgAAIAAAAAAgAAAAAAAAAAABAAEAAAAAA=</HashCode>
       <FileName>Reader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileLfn" Collapsed="true">
+    <Position X="8.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAgAAAAAQAAAAAAAAAAAAAAAAAAAQI=</HashCode>
+      <FileName>FileLfn.h</FileName>
     </TypeIdentifier>
   </Class>
   <Struct Name="BootSector" Collapsed="true">
     <Position X="7.5" Y="2.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAMAAgAAAAAAAAAAAAAgAgAAAAAAABEIAIAAAA=</HashCode>
-      <FileName>FAT32Structure.h</FileName>
-    </TypeIdentifier>
-  </Struct>
-  <Struct Name="DirectoryRecord" Collapsed="true">
-    <Position X="9.25" Y="2.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAEAAAAAAAgAAAgAAAAAEAAAAEAAAAAAAAAA=</HashCode>
-      <FileName>FAT32Structure.h</FileName>
-    </TypeIdentifier>
-  </Struct>
-  <Struct Name="DirectoryRecordLFN" Collapsed="true">
-    <Position X="7.5" Y="3.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAQAAAAAAAQCAAAAAAAgAAQAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>FAT32Structure.h</FileName>
     </TypeIdentifier>
   </Struct>

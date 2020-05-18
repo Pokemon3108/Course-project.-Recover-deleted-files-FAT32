@@ -14,7 +14,10 @@ class Volume
 	//HANDLE handle;
 
 public:
-	Volume() { }
+	Volume() { 
+		GUIDPath = new WCHAR[100];
+		totalCapacity.QuadPart = 0; 
+	}
 
 	Volume(LPCWSTR path) {
 		GUIDPath = new WCHAR[100];

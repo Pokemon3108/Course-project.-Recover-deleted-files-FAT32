@@ -52,6 +52,7 @@ int FAT32FileSystem::getStartSectorOfActiveFat()
 	}
 	if (numberOfActiveFat != bootSector.fatCopiesNumber) startSector += numberOfActiveFat * bootSector.fatSize;
 	return startSector;
+
 }
 
 list<int> FAT32FileSystem::getFileClusters(const File & file)
@@ -65,6 +66,18 @@ list<int> FAT32FileSystem::getFileClusters(const File & file)
 		while (fatTable[startCluster++]);
 	}
 	return clusters;
+}
+
+list<int> FAT32FileSystem::getRootDirectoryClusters()
+{
+	list<int> rootDirectoryClusters;
+	int currentCluster = bootSector.clusterOfRootDirectory;
+	while (currentCluster < 0xffffff7) {
+		rootDirectoryClusters.push_back(currentCluster);
+		currentCluster = fatTable[currentCluster];
+	}
+	//rootDirectoryClusters.push_back(currentCluster);
+	return rootDirectoryClusters;
 }
 
 
@@ -114,32 +127,29 @@ void FAT32FileSystem::createRootDirectory()
 {
 	UCHAR* buffer = new UCHAR[bootSector.bytesInSector];
 
-	bool recordIsEmpty = true;
-	int currentSector = bootSector.reservedAreaSize + bootSector.fatCopiesNumber*bootSector.fatSize;
-	currentSector += (bootSector.sectorsInCluster-1)*bootSector.bytesInSector;
+	bool stop = false;
+	list<int> rootDirectoryClusters=getRootDirectoryClusters();
+	
 
-	int noZeroSectors = bootSector.sectorsInCluster;
-
-
-	while (noZeroSectors && recordIsEmpty) {
+	list<int>::iterator it=rootDirectoryClusters.begin();
+	advance(it, rootDirectoryClusters.size() - 1);
+	int currentSector = bootSector.reservedAreaSize + bootSector.fatSize*bootSector.fatCopiesNumber;
+	int noZeroSectors = 0;
+	for (; noZeroSectors < 8; ++noZeroSectors) {
 		reader->ReadSector(currentSector, bootSector.bytesInSector, bootSector.bytesInSector, buffer);
-		for (int i = 0; i < bootSector.bytesInSector; ++i) {
-			if (buffer[i] != 0) {
-				recordIsEmpty = false;
-				break;
-			}
+		for (int j = 0; j < bootSector.bytesInSector; j+=32) {
+			if (buffer[j]==0) stop = true;
+			else break;
 		}
-		if (!recordIsEmpty) break;
-		currentSector -= bootSector.bytesInSector;
-		--noZeroSectors;
+		if (stop) break;
+		++currentSector;
 	}
 
 	delete[] buffer;
 
-	rootDirectorySize = (noZeroSectors)*bootSector.bytesInSector;
+	rootDirectorySize = (noZeroSectors)*bootSector.bytesInSector+(rootDirectoryClusters.size()-1)*bootSector.sectorsInCluster*bootSector.bytesInSector;
 	rootDirectory = new UCHAR[rootDirectorySize];
 	
-
 	int rootDirectorySector = bootSector.reservedAreaSize + bootSector.fatCopiesNumber*bootSector.fatSize;
 	reader->ReadSector(rootDirectorySector, bootSector.bytesInSector, rootDirectorySize, rootDirectory);
 
@@ -190,6 +200,7 @@ void FAT32FileSystem::recoverFile(UINT32 offset, File& fileRecord)
 	if (!isFreeCluster(offset, fileRecord.getFirstCluster())) return;
 
 	list<int> clusters=getFileClusters(fileRecord);
+	
 	UCHAR* fileContent = new UCHAR[fileRecord.getSize()];
 
 	

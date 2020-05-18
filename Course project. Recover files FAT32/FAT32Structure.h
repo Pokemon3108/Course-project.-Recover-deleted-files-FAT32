@@ -5,7 +5,7 @@ struct BootSector {
 	UINT16 bytesInSector;
 	UCHAR sectorsInCluster;
 	UINT16 reservedAreaSize;
-	UCHAR fatCopiesNumber;
+	UINT16 fatCopiesNumber;
 	UINT16 sectorsInFS16;
 	UINT32 sectorsInFS32;
 	UINT32 fatSize;
@@ -36,14 +36,14 @@ struct BootSector {
 
 
 
-struct DirectoryRecordLFN {
-	UCHAR numberOfLFNRecord;
-	WCHAR fileName1_5[5];
-	UCHAR attribyte;
-	UCHAR controlSum;
-	WCHAR fileName6_11[5];
-	WCHAR fileName12_13[2];
-};
+//struct DirectoryRecordLFN {
+//	UCHAR numberOfLFNRecord;
+//	WCHAR fileName1_5[5];
+//	UCHAR attribyte;
+//	UCHAR controlSum;
+//	WCHAR fileName6_11[5];
+//	WCHAR fileName12_13[2];
+//};
 
 
 

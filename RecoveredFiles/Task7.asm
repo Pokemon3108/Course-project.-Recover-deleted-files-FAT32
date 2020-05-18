@@ -44,7 +44,7 @@ blockEPB dw 0 ;текущее окружение
 	dw 006ch, 0
 	
 	cmd db 10, ' ' 		
-	cmd_text db 125 dup (0)
+	cmd_text db 125 dup (13)
 
 EPBlen dw $-blockEPB	
 
@@ -138,7 +138,7 @@ parse_cmd proc
 	lea di, copies
 	call get_number
 
-	cmp ds:[si], 0
+	cmp ds:[si], 13
     jne cmd_error
 	
 	pop di
@@ -158,7 +158,7 @@ get_number proc
 
 find_stop_symbol:	
 	mov al, ds:[si]
-	cmp al, 0
+	cmp al, 13
 	je found_stop_symbol     
 	cmp al,' '
 	je found_stop_symbol 
@@ -346,7 +346,7 @@ create_new_cmd proc
 	mov max_len, cmd_max
 	call zero_str
 	pop max_len
-	mov [di], byte ptr' '
+	mov [di], byte ptr ' '
 	inc di
 	
 	push di

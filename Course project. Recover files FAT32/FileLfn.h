@@ -3,12 +3,11 @@
 
 class FileLfn : public File
 {
-
+private:
+	wstring getPartName(const UCHAR * record, int offsetStart, int offsetEnd);
 public:
 	FileLfn() {};
 	~FileLfn() {};
-
-	wstring getPartName(const UCHAR * record, int offsetStart, int offsetEnd);
 
 	virtual void createFileName(const UCHAR* record);
 	virtual void createSize(const UCHAR* record);

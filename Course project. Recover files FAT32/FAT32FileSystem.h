@@ -33,6 +33,7 @@ public:
 
 	int getStartSectorOfActiveFat();
 	list<int> getFileClusters(const File& file);
+	list<int> getRootDirectoryClusters();
 
 	void recoverDeletedFiles();
 	void recoverFile(UINT32 offset, File& fileRecord);

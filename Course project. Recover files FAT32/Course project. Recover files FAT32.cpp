@@ -43,7 +43,8 @@ int main() {
 	fat32.createRootDirectory();
 	cout << "Recover files..." << endl;
 	fat32.recoverDeletedFiles();
-	
+	cout << "Files were recovered" << endl;
+	system("pause");
 
 	return 0;
 }

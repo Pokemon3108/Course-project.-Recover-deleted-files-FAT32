@@ -7,8 +7,9 @@ void inputCheck(int & number, int range1, int range2)
 	bool flag = false;
 	do {
 		try {
+			flag = false;
 			cin >> number;
-			if (number<range1 && number>range2) throw out_of_range("Input is out of range");
+			if (number<range1 || number>range2) throw out_of_range("Input is out of range. Try again");
 			
 		}
 		catch (out_of_range e) {
