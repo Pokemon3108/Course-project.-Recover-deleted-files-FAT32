@@ -16,9 +16,6 @@ void FileLfn::createFileName(const UCHAR * record)
 		name += getPartName(record+offset, 14, 25);
 		name += getPartName(record+offset, 28, 31);
 
-		/*int banSymbolNumber=std::count(name.begin(), name.end(), 0xffff);
-		if (banSymbolNumber != 0) name.clear();*/
-
 		name.erase(std::remove(name.begin(), name.end(), 0xffff), name.end());
 		
 
@@ -41,9 +38,7 @@ std::wstring FileLfn::getPartName(const UCHAR * record, int offsetStart, int off
 	int i = 0;
 	for (int offset = offsetStart; offset < offsetEnd + 1; offset+=2, ++i) {
 		part.push_back(conversion.converseToType(record, offset, offset + 1));
-		//part[i]=(WCHAR)conversion.converseToType(record, offset, offset + 1);
 	}
-	
 	
 	delete[] buffer;
 	

@@ -155,7 +155,7 @@ void FAT32FileSystem::createRootDirectory()
 
 }
 
-void FAT32FileSystem::recoverDeletedFiles()
+void FAT32FileSystem::recoverDeletedFiles(wstring folderName)
 {
 	UINT32 offset = 0;
 
@@ -174,14 +174,14 @@ void FAT32FileSystem::recoverDeletedFiles()
 				}
 							
 				FileLfn fileLfn;
-				recoverFile(offset, fileLfn);
+				recoverFile(offset, fileLfn, folderName);
 				while (rootDirectory[offset + 11] == 0x0f) offset += 32;
 			}
 				
 
 			else if (rootDirectory[offset + 11] == 0x20) {
 				File file;
-				recoverFile(offset, file);
+				recoverFile(offset, file, folderName);
 			}
 			offset += 32;
 		}
@@ -191,7 +191,7 @@ void FAT32FileSystem::recoverDeletedFiles()
 
 
 
-void FAT32FileSystem::recoverFile(UINT32 offset, File& fileRecord)
+void FAT32FileSystem::recoverFile(UINT32 offset, File& fileRecord, wstring folderName)
 {
 	getFileInfo(offset, fileRecord);
 
@@ -208,7 +208,7 @@ void FAT32FileSystem::recoverFile(UINT32 offset, File& fileRecord)
 		(fileRecord.getFirstCluster() - 2)*bootSector.sectorsInCluster;
 	reader->ReadSector(startSector, bootSector.bytesInSector, fileRecord.getSize(), fileContent);
 
-	wstring filePath = L"..\\RecoveredFiles\\" + fileRecord.getFileName();
+	wstring filePath =  folderName + fileRecord.getFileName();
 	HANDLE hFile = CreateFileW(filePath.c_str(), GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 	DWORD written;
 	WriteFile(hFile, fileContent, fileRecord.getSize(), &written, NULL);

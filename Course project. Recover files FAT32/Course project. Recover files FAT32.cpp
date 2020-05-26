@@ -15,35 +15,40 @@ int main() {
 	info.searchVolumes();
 	info.eraseNoNamedVolumes();
 
-	
-	Menu menu;	
-	menu.printVolumesInformation(info);
-	if (!info.fileSystemisInComputer(fat)) {
-		cout << "There is no FAT32 in computer" << endl;
-		getchar();
-		return 0;
+	while (true) {
+
+		Menu menu;
+		menu.printVolumesInformation(info);
+		if (!info.fileSystemisInComputer(fat)) {
+			cout << "There is no FAT32 in computer" << endl;
+			break;
+		}
+		int numberOfVolume = menu.chooseVolume(info);
+		if (numberOfVolume == -1) break;
+
+		Volume volume = info.getVolume(numberOfVolume);
+
+
+		Reader reader;
+
+		reader.OpenDevice(volume.getGUIDPath());
+
+		cout << "Parse file system..." << endl;
+		FAT32FileSystem fat32 = FAT32FileSystem(&reader);
+		fat32.createBootSector();
+		fat32.createFatTable();
+		fat32.createRootDirectory();
+		cout << "Recover files..." << endl;
+
+
+		wstring folderName = L"..\\RecoveredFiles\\";
+		folderName.push_back(volume.getLetter()[0]);
+		folderName += L"\\";
+		CreateDirectoryW(folderName.c_str(), NULL);
+		fat32.recoverDeletedFiles(folderName);
+		cout << "Files were recovered" << endl;
+
 	}
-	int numberOfVolume=menu.chooseVolume(info);
-
-	//if (numberOfVolume == -1) return 0;
-	//int numberOfVolume = 2;
-	Volume volume = info.getVolume(numberOfVolume);
-
-	//wstring path = volume.getGUIDPath();
-	//path.at(path.length() - 1) = 0;
-	//HANDLE hDisk = CreateFileW(path.c_str(), GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-	Reader reader;
-
-	reader.OpenDevice(volume.getGUIDPath());
-
-	cout << "Parse file system..." << endl;
-	FAT32FileSystem fat32 = FAT32FileSystem(&reader);
-	fat32.createBootSector();
-	fat32.createFatTable();
-	fat32.createRootDirectory();
-	cout << "Recover files..." << endl;
-	fat32.recoverDeletedFiles();
-	cout << "Files were recovered" << endl;
 	system("pause");
 
 	return 0;

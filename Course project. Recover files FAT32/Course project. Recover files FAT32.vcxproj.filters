@@ -33,9 +33,6 @@
     <ClInclude Include="Reader.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="FAT32Structure.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="Conversion.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
@@ -46,6 +43,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="FileLfn.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="BootSector.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

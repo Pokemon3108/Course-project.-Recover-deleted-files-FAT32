@@ -1,6 +1,6 @@
 #pragma once
 #include "Reader.h"
-#include "FAT32Structure.h"
+#include "BootSector.h"
 #include "File.h"
 #include <list>
 
@@ -35,8 +35,8 @@ public:
 	list<int> getFileClusters(const File& file);
 	list<int> getRootDirectoryClusters();
 
-	void recoverDeletedFiles();
-	void recoverFile(UINT32 offset, File& fileRecord);
+	void recoverDeletedFiles(wstring folderName);
+	void recoverFile(UINT32 offset, File& fileRecord, wstring folderName);
 
 	
 	bool isCorrectLFN(UINT32 offset);

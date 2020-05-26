@@ -1,6 +1,6 @@
 #pragma once
 #include "pch.h"
-#include "FAT32Structure.h"
+#include "BootSector.h"
 
 using namespace std;
 class File

@@ -154,7 +154,7 @@
     <ClInclude Include="ComputerInfo.h" />
     <ClInclude Include="Conversion.h" />
     <ClInclude Include="FAT32FileSystem.h" />
-    <ClInclude Include="FAT32Structure.h" />
+    <ClInclude Include="BootSector.h" />
     <ClInclude Include="File.h" />
     <ClInclude Include="FileLfn.h" />
     <ClInclude Include="InputCheck.h" />

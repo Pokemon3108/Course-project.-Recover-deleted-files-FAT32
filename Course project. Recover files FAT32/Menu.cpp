@@ -12,7 +12,7 @@ int Menu::chooseVolume(ComputerInfo& info)
 	bool flag=false;
 	do {
 		cout << "Choose volume (1-" << volumes.size() << "). 0 for quit" << endl;
-		inputCheck(choice, 1, volumes.size());
+		inputCheck(choice, 0, volumes.size());
 		--choice;
 		if (choice == -1) break;
 
